@@ -2,6 +2,7 @@ import:py flet as ft;
 
 obj TodoApp:ft.Column:{
     can init{
+        super.init();
         self.new_task = ft.TextField(hint_text="What needs to be done?", expand=True);
         self.tasks_view = ft.Column();
         self.width = 600;
