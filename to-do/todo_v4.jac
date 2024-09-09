@@ -1,14 +1,14 @@
 import:py flet as ft;
 
-obj Task:ft.Column:{
-    can init(task_name:str, task_delete: Any){
+obj Task :ft.Column: {
+    can init(task_name:str , task_delete:Any){
         super.init();
         self.task_name = task_name;
         self.task_delete = task_delete;
         self.display_task = ft.Checkbox(value=False, label=self.task_name);
         self.edit_name = ft.TextField(expand=1);
 
-         self.display_view = ft.Row(
+        self.display_view = ft.Row(
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
             vertical_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
@@ -41,7 +41,7 @@ obj Task:ft.Column:{
                     icon=ft.icons.DONE_OUTLINE_OUTLINED,
                     icon_color=ft.colors.GREEN,
                     tooltip="Update To-Do",
-                    on_click=self.save_clicked,
+                    on_click=self.save_clicked
                 )
             ]
         );
@@ -49,7 +49,7 @@ obj Task:ft.Column:{
         self.controls = [self.display_view, self.edit_view];
     }
 
-    can add_clicked(e:ft.ControlEvent){
+    can edit_clicked(e:ft.ControlEvent){
         self.edit_name.value = self.display_task.label;
         self.display_view.visible = False;
         self.edit_view.visible = True;
@@ -64,7 +64,7 @@ obj Task:ft.Column:{
     }
 
     can delete_clicked(e:ft.ControlEvent){
-        self.task_delete();
+        self.task_delete(self);
     }
 }
 
@@ -87,7 +87,7 @@ obj TodoApp:ft.Column:{
         ];
     }
 
-    can add_clicked(e:flet_core.control_event.ControlEvent){
+    can add_clicked(e:ft.ControlEvent){
         task = Task(self.new_task.value, self.task_delete);
         self.tasks.controls.append(task);
         self.new_task.value = "";
