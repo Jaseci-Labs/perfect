@@ -3,10 +3,8 @@ from typing import Callable
 
 
 class Task(ft.Column):
-    def __init__(self, task_name: str, task_delete: Callable[['Task'], None]):
+    def __init__(self, task_name, task_delete):
         super().__init__()
-        print(type(task_name))
-        print(type(task_delete))
         self.task_name = task_name
         self.task_delete = task_delete
         self.display_task = ft.Checkbox(value=False, label=self.task_name)

@@ -42,8 +42,8 @@ obj Task:ft.Column:{
                     icon_color=ft.colors.GREEN,
                     tooltip="Update To-Do",
                     on_click=self.save_clicked,
-                ),
-            ],
+                )
+            ]
         );
 
         self.controls = [self.display_view, self.edit_view];
@@ -80,21 +80,21 @@ obj TodoApp:ft.Column:{
                     self.new_task,
                     ft.FloatingActionButton(
                         icon=ft.icons.ADD, on_click=self.add_clicked
-                    ),
-                ],
+                    )
+                ]
             ),
-            self.tasks,
+            self.tasks
         ];
     }
 
-    can add_clicked(e:ft.ControlEvent){
+    can add_clicked(e:flet_core.control_event.ControlEvent){
         task = Task(self.new_task.value, self.task_delete);
         self.tasks.controls.append(task);
         self.new_task.value = "";
         self.update();
     }
 
-    can delete_task(task:Task){
+    can task_delete(task:Task){
         self.tasks.controls.remove(task);
         self.update();
     }
