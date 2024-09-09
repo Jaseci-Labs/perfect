@@ -3,7 +3,6 @@ import flet as ft
 
 class Task(ft.Column):
     def __init__(self, task_name, task_status_change, task_delete):
-        print(type(task_status_change))
         super().__init__()
         self.completed = False
         self.task_name = task_name
@@ -85,8 +84,15 @@ class TodoApp(ft.Column):
             on_change=self.tabs_changed,
             tabs=[ft.Tab(text="all"), ft.Tab(text="active"), ft.Tab(text="completed")],
         )
+
+        self.items_left = ft.Text("0 items left")
+
         self.width = 600
         self.controls = [
+            ft.Row(
+                [ft.Text(value="Todos", theme_style=ft.TextThemeStyle.HEADLINE_MEDIUM)],
+                alignment=ft.MainAxisAlignment.CENTER,
+            ),
             ft.Row(
                 controls=[
                     self.new_task,
@@ -100,6 +106,16 @@ class TodoApp(ft.Column):
                 controls=[
                     self.filter,
                     self.tasks,
+                    ft.Row(
+                        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                        vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                        controls=[
+                            self.items_left,
+                            ft.OutlinedButton(
+                                text="Clear completed", on_click=self.clear_clicked
+                            ),
+                        ],
+                    ),
                 ],
             ),
         ]
@@ -128,6 +144,24 @@ class TodoApp(ft.Column):
 
     def tabs_changed(self, e):
         self.update()
+
+    def clear_clicked(self, e):
+        for task in self.tasks.controls[:]:
+            if task.completed:
+                self.task_delete(task)
+
+    def before_update(self):
+        status = self.filter.tabs[self.filter.selected_index].text
+        count = 0
+        for task in self.tasks.controls:
+            task.visible = (
+                status == "all"
+                or (status == "active" and task.completed == False)
+                or (status == "completed" and task.completed)
+            )
+            if not task.completed:
+                count += 1
+        self.items_left.value = f"{count} active item(s) left"
 
 
 def main(page: ft.Page):
