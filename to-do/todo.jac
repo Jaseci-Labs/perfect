@@ -4,6 +4,11 @@ obj Task :ft.Column: {
 
     has task_name:str , task_status_change:Any, task_delete:Any;
     has completed:bool = False;
+    has display_task:Any by postinit;
+    has edit_name:Any by postinit;
+    has display_view:Any by postinit;
+    has edit_view:Any by postinit;
+    has controls:list by postinit;
 
     can postinit(){
         super.init();
@@ -78,19 +83,19 @@ obj Task :ft.Column: {
 }
 
 obj TodoApp:ft.Column:{
-
-    has new_task:Any = ft.TextField(hint_text="What needs to be done?", expand=True);
-    has tasks:Any = ft.Column();
-    has items_left:Any = ft.Text("0 items left");
-
-    can postinit(){
+    
+    can init(){
         super.init();
+        self.new_task = ft.TextField(hint_text="What needs to be done?", expand=True);
+        self.tasks = ft.Column();
 
         self.filter = ft.Tabs(
             selected_index=0,
             on_change=self.tabs_changed,
             tabs=[ft.Tab(text="all"), ft.Tab(text="active"), ft.Tab(text="completed")]
         );
+
+        self.items_left = ft.Text("0 items left");
 
         self.width = 600;
         self.controls = [
