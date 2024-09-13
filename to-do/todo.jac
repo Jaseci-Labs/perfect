@@ -1,12 +1,12 @@
 import:py flet as ft;
 
 obj Task :ft.Column: {
-    can init(task_name:str , task_status_change:Any, task_delete:Any){
+
+    has task_name:str , task_status_change:Any, task_delete:Any;
+    has completed:bool = False;
+
+    can postinit(){
         super.init();
-        self.completed = False;
-        self.task_name = task_name;
-        self.task_status_change = task_status_change;
-        self.task_delete = task_delete;
         self.display_task = ft.Checkbox(
             value=False, label=self.task_name, on_change=self.status_changed
         );
@@ -78,18 +78,19 @@ obj Task :ft.Column: {
 }
 
 obj TodoApp:ft.Column:{
-    can init(){
+
+    has new_task:Any = ft.TextField(hint_text="What needs to be done?", expand=True);
+    has tasks:Any = ft.Column();
+    has items_left:Any = ft.Text("0 items left");
+
+    can postinit(){
         super.init();
-        self.new_task = ft.TextField(hint_text="What needs to be done?", expand=True);
-        self.tasks = ft.Column();
 
         self.filter = ft.Tabs(
             selected_index=0,
             on_change=self.tabs_changed,
             tabs=[ft.Tab(text="all"), ft.Tab(text="active"), ft.Tab(text="completed")]
         );
-
-        self.items_left = ft.Text("0 items left");
 
         self.width = 600;
         self.controls = [
