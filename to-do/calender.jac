@@ -24,9 +24,12 @@ walker calender{
 
 :walker:calender:can:create{
 
-    for y in self.years{
-        here ++> year(id = y);
-    }
+    year_nodes = [year(id = y) for y in self.years];
+    month_nodes = [month(id = m) for m in self.months];
+
+    here ++> year_nodes;
+    year_nodes ++> month_nodes;
+
 
 }
 
