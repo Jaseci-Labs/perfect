@@ -19,8 +19,8 @@ node day{
 }
 
 walker calender{
-    has months: list = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    has years: list = list(range(2023, 2041));
+    has months: list = ["January"];
+    has years: list = list(range(2023, 2024));
 
     can create with `root entry;
 }
@@ -28,17 +28,23 @@ walker calender{
 :walker:calender:can:create{
 
     year_nodes = [year(id = y) for y in self.years];
-    month_nodes = [month(id=i+1, name=m) for (i, m) in enumerate(self.months)];
-    day_nodes = [day(id=d) for d in range(1, 32)];
+    here ++> year_nodes;
 
     can get_days(y: int,m: int){
         days = cal.monthrange(y, m)[1];
         return days;
     }
 
-    here ++> year_nodes;
-    year_nodes ++> month_nodes;
-
+    for y in year_nodes{
+        month_nodes = [month(id=i+1, name=m) for (i, m) in enumerate(self.months)];
+        y ++> month_nodes;
+        
+        for m in month_nodes{
+            days_in_month = get_days(y.id, m.id);
+            day_nodes = [day(id=str(i+1)) for i in range(days_in_month)];
+            m ++> day_nodes;
+        }
+    }
 }
 
 with entry{
